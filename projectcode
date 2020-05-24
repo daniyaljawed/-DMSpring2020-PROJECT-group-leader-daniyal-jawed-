@@ -1,5 +1,69 @@
 
 
+namespace finalprojectby63166
+{
+    class Execute
+    {
+        stackno2forarray stack;
+        public Execute(int Length) {
+
+            stack = new stackno2forarray(Length);
+        }
+        
+        public string Result(string postfixExpression, int[] setA, int[] setB, int[] setC, int[] Universe)
+        {
+            int postfixLength = postfixExpression.Length;
+            for (int i = 0; i < postfixLength; i++)
+            {
+                if (postfixExpression[i] == 'A' || postfixExpression[i] == 'B' || postfixExpression[i] == 'C')
+                {
+                    if (postfixExpression[i] == 'A')
+                    {
+                        stack.Push(setA);
+                    }
+                    else if (postfixExpression[i] == 'B')
+                    {
+                        stack.Push(setB);
+                    }
+                    else if (postfixExpression[i] == 'C')
+                    {
+                        stack.Push(setC);
+                    }
+                }
+                else if (postfixExpression[i] == '⋃' || postfixExpression[i] == '⋂' || postfixExpression[i] == '`' || postfixExpression[i] == '-')
+                {
+                    if (postfixExpression[i] == '`')
+                    {
+                        int[] Array1 = Universe;
+                        int[] Array2 = stack.Pop();
+                        int[] result = Preform(postfixExpression[i], Array1, Array2);
+                        stack.Push(result);
+                    }
+                    else
+                    {
+                        int[] Array2 = stack.Pop();
+                        int[] Array1 = stack.Pop();
+                        int[] result = Preform(postfixExpression[i], Array1, Array2);
+                        stack.Push(result);
+                    }
+                }
+            }
+
+            int[] evaluated = stack.Pop();
+            string Evaluated = "";
+            for (int i = 0; i < evaluated.Length; i++)
+            {
+                if (evaluated[i] == 0)
+                {
+                    break;
+                }
+                else
+                {
+                    Evaluated += " " + Convert.ToString(evaluated[i]);
+                }
+            }
+            return Evaluated;
+        }
         int[] Preform(char Operator, int[] Array1, int[] Array2)
         {
             int[] temp = new int[0];
@@ -12,9 +76,23 @@
                 return (Union(Array1, Array2, LA1, LA2));
                 
             }
-         
+            else if (Operator == '⋂')
+            {
+                return (Intersection(Array1, Array2, LA1, LA2));
+            }
+            else if (Operator == '`' || Operator == '-')
+            {
+                return(Difference(Array1,Array2,LA1,LA2));
+            }
+            else
+            {
+                return temp;
+            }
+        }
 
-int[] Union(int[] Array1, int[] Array2, int LA1, int LA2)
+        // mtd uni
+
+        int[] Union(int[] Array1, int[] Array2, int LA1, int LA2)
         {
             int[] result = new int[LA1 + LA2];
             int index = 0, i = 0, j = 0;
@@ -97,3 +175,60 @@ int[] Union(int[] Array1, int[] Array2, int LA1, int LA2)
                 }
             }
         }
+        //mtd Ints 
+
+
+
+        int[] Intersection(int[] Array1, int[] Array2, int LA1, int LA2)
+        { 
+
+            int[] result = new int[LA1 + LA2];
+            int index = 0, i = 0, j = 0;
+          
+            while (i < LA1 && j  < LA2)
+            {
+                if (Array1[i] < Array2[j])
+                {
+                    i++;
+                }
+                else if (Array2[j] < Array1[i])
+                {
+                    j++;
+                }
+                else
+                {
+                    result[index++] = Array2[j++];
+                    i++;
+                }
+            }
+            return result; 
+        }
+        //Mtd Diff
+        int[] Difference(int[] Array1, int[] Array2, int LA1, int LA2)
+        {
+            int[] result = new int[LA1 + LA2];
+            int i = 0, j = 0, index = 0;
+            bool fg = true;
+            while (i < LA1)
+            {
+                for (j = 0; j < LA2; )
+                {
+                    if (Array1[i] == Array2[j])
+                    {
+                        fg = false;
+                        break;
+                    }
+                    j++;
+                }
+                if (fg == true)
+                {
+                    result[index] = Array1[i];
+                    index++;
+                }
+                fg = true;
+                i++;
+            }
+            return result;
+        }
+    }
+}
