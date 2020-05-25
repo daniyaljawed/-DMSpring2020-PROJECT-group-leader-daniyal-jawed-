@@ -317,8 +317,8 @@ namespace ProjectDMby63155
         }
         public char Pop()
         {
-            char element = stack[top];
-            top++;
+            char element = array[top];
+            top--;
             return element;
         }
     }
