@@ -277,3 +277,49 @@ namespace ProjectDMby63155
 }
 
 
+//
+
+namespace ProjectDMby63155
+{
+    class Stackno1
+
+    {
+        char[] array;
+        int top;
+        int maximumstack;
+        public Stackno1(int capacity)
+        {
+            top = -1;
+            maximumstack = capacity;
+            array = new char[maximumstack];
+        }
+        public bool isEmpty() 
+        {
+            if (top == -1)
+                return true;
+            else
+                return false;
+        }
+        public bool isFull()
+        {
+            if (top == maximumstack - 1)
+                return true;
+            else
+                return false;
+        }
+        public void Push(char element)
+        {
+            if (!isFull()) 
+            {
+                top++;
+                array[top] = element;
+            }
+        }
+        public char Pop()
+        {
+            char element = stack[top];
+            top++;
+            return element;
+        }
+    }
+}
