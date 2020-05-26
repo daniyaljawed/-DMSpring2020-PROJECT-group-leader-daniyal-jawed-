@@ -323,3 +323,105 @@ namespace ProjectDMby63155
         }
     }
 }
+
+
+
+///using System.Threading.Tasks;
+
+namespace ProjectDMby63155
+
+{
+
+  class InfixToPostExpression
+    {
+        
+
+        public string PostfixExpression(string infixExpression)
+        {
+            Stackno1 stack = new Stackno1(infixExpression.Length);
+            int Length = infixExpression.Length;
+            stack.Push('(');
+            char[] Postfix = new char[Length];
+            infixExpression += ')';
+            int CountInfix = 0;
+            int CountPostfix = 0;
+            while (!stack.isEmpty())
+            {
+                char chacracter  = infixExpression[CountInfix++];
+                if (chacracter  != '⋃' && chacracter  != '⋂' && chacracter  != '-' && chacracter  != '`' && chacracter  != '(' && chacracter  != ')')
+                {
+                    Postfix[CountPostfix++] = chacracter ;
+                }
+                else if (chacracter  == '(')
+                {
+                    stack.Push(chacracter );
+                }
+                else if (chacracter  == '⋃' || chacracter  == '⋂')
+                {
+                    while (true)
+                    {
+                        char item = stack.Pop();
+                        if (item != '(')
+                        {
+                            Postfix[CountPostfix++] = item;
+                        }
+                        else
+                        {
+                            stack.Push(item);
+                            break;
+                        }
+                    }
+                    stack.Push(chacracter );
+                }
+                else if (chacracter  == '-')
+                {
+                    while (true)
+                    {
+                        char item = stack.Pop();
+                        if (item == '-')
+                        {
+                            Postfix[CountPostfix++] = item;
+                        }
+                        else
+                        {
+                            stack.Push(item);
+                            break;
+                        }
+                    }
+                    stack.Push(chacracter );
+                }
+                else if (chacracter  == '`')
+                {
+                    while (true)
+                    {
+                        char item = stack.Pop();
+                        if (item == '`')
+                        {
+                            Postfix[CountPostfix++] = item;
+                        }
+                        else
+                        {
+                            stack.Push(item);
+                            break;
+                        }
+                    }
+                    stack.Push(chacracter );
+                }
+                else if (chacracter  == ')')
+                {
+                    char item;
+                    while ((item = stack.Pop()) != '(')
+                    {
+                        Postfix[CountPostfix++] = item;
+                    }
+                }
+
+            }
+            string dani = "";
+            for (int i = 0; i < Postfix.Length; i++)
+            {
+                dani += Convert.ToString(Postfix[i]);
+            }
+            return dani;
+        }
+    }
